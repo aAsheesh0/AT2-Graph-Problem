@@ -136,6 +136,7 @@
     <ClInclude Include="neural_graph_utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="graph.txt" />
     <Text Include="human_brain_dataset.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -37,5 +37,8 @@
     <Text Include="human_brain_dataset.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="graph.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
