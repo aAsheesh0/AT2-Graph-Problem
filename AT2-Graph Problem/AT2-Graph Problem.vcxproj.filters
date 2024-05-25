@@ -24,7 +24,7 @@
     <ClCompile Include="neural_graph_utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="spectral_clustering.c">
+    <ClCompile Include="k_means.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -35,7 +35,7 @@
     <ClInclude Include="neural_graph_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="spectral_clustering.h">
+    <ClInclude Include="k_means.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

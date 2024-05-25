@@ -128,14 +128,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="assignment.c" />
+    <ClCompile Include="k_means.c" />
     <ClCompile Include="neural_graph.c" />
     <ClCompile Include="neural_graph_utils.c" />
-    <ClCompile Include="spectral_clustering.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="k_means.h" />
     <ClInclude Include="neural_graph.h" />
     <ClInclude Include="neural_graph_utils.h" />
-    <ClInclude Include="spectral_clustering.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="graph.txt" />
