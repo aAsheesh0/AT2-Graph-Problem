@@ -6,7 +6,8 @@
 #define EPSILON 1e-4
 
 void initialize_centroids(int k, int n, double** centroids);
-void assign_clusters(Graph* graph, int k, double** centroids, int* cluster_labels);
-void k_means(Graph* graph, int k, int* cluster_labels);
+void assign_clusters(Graph* self, int k, double** centroids, int* cluster_labels);
+void update_centroids(Graph* self, int k, double** centroids, int* cluster_labels);
+void k_means(Graph* self, int k, int* cluster_labels);
 
 #endif
