@@ -48,21 +48,11 @@ int main() {
 		add_edge(&G, vertex_map[from], vertex_map[to], 0);
 	}
 
-	printf("\n-In Degree Vertices-\n");
-	print_in_degrees(&G);
-
-	//Freeing Dynamically Allocated Memory
-	for (int v = 0; v < G.vertex; v++) {
-		EdgeNodePtr current = G.edges[v].head;
-		while (current != NULL) {
-			EdgeNodePtr temp = current;
-			current = current->next;
-			free(temp);
-		}
-	}
+	//printf("\n-In Degree Vertices-\n");
+	//print_in_degrees(&G);
 
 	// Free dynamically allocated memory for the array of edge lists
-	free(G.edges);
+	free_neural_graph(&G);
 	free(vertex_map);
 	free_int_array(&vertices);
 

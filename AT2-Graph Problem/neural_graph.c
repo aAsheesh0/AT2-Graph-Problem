@@ -60,3 +60,15 @@ void print_in_degrees(Graph* self) {
     //Freeing the dyanmically allocated memory for in-degress array
     free(in_degrees);
 }
+
+void free_neural_graph(Graph* self) {
+    for (int i = 0; i < self->vertex; i++) {
+        EdgeNodePtr current = self->edges[i].head;
+        while (current != NULL) {
+            EdgeNodePtr temp = current;
+            current = current->next;
+            free(temp);
+        }
+    }
+    free(self->edges);
+}

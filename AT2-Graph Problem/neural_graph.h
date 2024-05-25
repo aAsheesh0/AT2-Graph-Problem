@@ -30,5 +30,6 @@ void add_edge(Graph* self, int from, int to, int weight);
 void init_edge_list(EdgeList* list);
 void insert_edge_at_front(EdgeList* list, int to_vertex, int weight);
 void print_in_degrees(Graph* self); // Tester function
+void free_neural_graph(Graph* self);
 
 #endif

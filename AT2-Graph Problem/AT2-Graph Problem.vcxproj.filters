@@ -24,12 +24,18 @@
     <ClCompile Include="neural_graph_utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="spectral_clustering.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="neural_graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="neural_graph_utils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="spectral_clustering.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
