@@ -4,6 +4,7 @@
 #include <string.h>
 #include "neural_graph.h"
 #include "neural_graph_utils.h"
+#include "k_means.h"
 
 void brain_graph_initializer(const char* filename, Graph* graph) {
 	IntArray vertices;
@@ -56,10 +57,22 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 int main() {
 	Graph G;
 
-	brain_graph_initializer("human_brain_dataset.txt", &G);
+	brain_graph_initializer("graph.txt", &G);
 
-	printf("\n-In Degree Vertices-\n");
-	print_in_degrees(&G);
+	//printf("\n-In Degree Vertices-\n");
+	//print_in_degrees(&G);
+
+	printf("\nTesting K-Means Clustering:\n");
+	int k = 4;
+	int* cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+
+	k_means(&G, k, cluster_labels);
+
+	for (int i = 0; i < G.vertex; i++) {
+		printf("Vertex %d: Cluster %d\n", i, cluster_labels[i]);
+	}
+
+	free(cluster_labels);
 
 	// Free dynamically allocated memory
 	free_neural_graph(&G);
