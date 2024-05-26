@@ -5,13 +5,12 @@
 #include "neural_graph.h"
 #include "neural_graph_utils.h"
 
-int main() {
-	Graph G;
+void brain_graph_initializer(const char* filename, Graph* graph) {
 	IntArray vertices;
 	init_int_array(&vertices, 1000);
 
 	// Reading the txt file
-	FILE* file = fopen("human_brain_dataset.txt", "r");
+	FILE* file = fopen(filename, "r");
 	if (file == NULL) {
 		printf("Error opening file\n");
 		perror("fopen");
@@ -41,22 +40,29 @@ int main() {
 		vertex_map[vertices.data[i]] = i;
 	}
 
-	init_neural_graph(&G, unique_size);
+	init_neural_graph(graph, unique_size);
 	rewind(file);
 
 	while (fscanf(file, "%d %d", &from, &to) == 2) {
-		add_edge(&G, vertex_map[from], vertex_map[to], 0);
+		add_edge(graph, vertex_map[from], vertex_map[to], 0);
 	}
 
-	//printf("\n-In Degree Vertices-\n");
-	//print_in_degrees(&G);
-
-	// Free dynamically allocated memory for the array of edge lists
-	free_neural_graph(&G);
-	free(vertex_map);
+	// Free dynamically allocated memory
 	free_int_array(&vertices);
-
+	free(vertex_map);
 	fclose(file);
+}
 
-	return ;
+int main() {
+	Graph G;
+
+	brain_graph_initializer("human_brain_dataset.txt", &G);
+
+	printf("\n-In Degree Vertices-\n");
+	print_in_degrees(&G);
+
+	// Free dynamically allocated memory
+	free_neural_graph(&G);
+
+	return;
 }

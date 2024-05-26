@@ -83,3 +83,22 @@ void update_centroids(Graph* self, int k, double** centroids, int* cluster_label
     }
     free(cluster_sums);
 }
+
+//compute K-means clustering
+void k_means(Graph* self, int k, int* cluster_labels) {
+    double** centroids = (double**)malloc(k * sizeof(double*));
+    for (int i = 0; i < k; i++) {
+        centroids[i] = (double*)malloc(self->vertex * sizeof(double));
+    }
+    initialize_centroids(k, self->vertex, centroids);
+
+    for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+        assign_clusters(self, k, centroids, cluster_labels);
+        update_centroids(self, k, centroids, cluster_labels);
+    }
+
+    for (int i = 0; i < k; i++) {
+        free(centroids[i]);
+    }
+    free(centroids);
+}
