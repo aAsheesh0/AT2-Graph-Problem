@@ -3,12 +3,10 @@
 #include "neural_graph.h"
 
 #define MAX_ITERATIONS 100
-#define EPSILON 1e-4
 
-void initialize_centroids(int k, int n, double** centroids);
+void initialize_centroids(Graph* self, int n, double** centroids);
 void assign_clusters(Graph* self, int k, double** centroids, int* cluster_labels);
 void update_centroids(Graph* self, int k, double** centroids, int* cluster_labels);
-double euclidean_distance(double* data_point1, double* data_point2, int n);
 void k_means(Graph* self, int k, int* cluster_labels);
 
 #endif

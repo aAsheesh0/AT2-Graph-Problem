@@ -2,25 +2,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <limits.h>
+#include <float.h>
 
-//initialize centeroids randomly
-void initialize_centroids(int k, int n, double** centroids) {
-    for (int i = 0; i < k; i++) {
-        for (int j = 0; j < n; j++) {
-            centroids[i][j] = (double)rand() / RAND_MAX;
-        }
-    }
-    printf("Initial Centroids:\n");
-    for (int i = 0; i < k; i++) {
-        printf("Centroid %d: ", i);
-        for (int j = 0; j < n; j++) {
-            printf("%f ", centroids[i][j]);
-        }
-        printf("\n");
-    }
-}
-
+//gaug the similarity and diversity of sample sets
 double jaccard_similarity(int* set1, int size1, int* set2, int size2) {
     int intersection_size = 0;
     int union_size = size1 + size2;
@@ -41,6 +25,16 @@ double jaccard_similarity(int* set1, int size1, int* set2, int size2) {
     }
 
     return (double)intersection_size / union_size;
+}
+
+//calculate the distance between a vertex and a centroid using the Jaccard similarity.
+void calculate_distance(Graph* self, int vertex, double* centroid) {
+
+}
+
+//initialize centeroids based on selection with the help of helper functions to calculate the centroid to initialize to
+void initialize_centroids(Graph* self, int k, double** centroids) {
+
 }
 
 // assign data points to clusters
@@ -78,13 +72,14 @@ void assign_clusters(Graph* self, int k, double** centroids, int* cluster_labels
         cluster_labels[i] = closest_centroid;
         free(vertex_edges);
     }
-    printf("Cluster Assignments:\n");
+    //Debug
+    /*printf("Cluster Assignments:\n");
     for (int i = 0; i < self->vertex; i++) {
         printf("Vertex %d: Cluster %d\n", i, cluster_labels[i]);
-    }
+    }*/
 }
 
-//calculate Euclidean distance between two data points
+//calculate Euclidean distance between two data points (The random calculations were not being executed properly)
 /*double euclidean_distance(double* data_point1, double* data_point2, int n) {
     double distance = 0.0;
     for (int i = 0; i < n; i++) {
@@ -94,10 +89,6 @@ void assign_clusters(Graph* self, int k, double** centroids, int* cluster_labels
 }*/
 
 void update_centroids(Graph* self, int k, double** centroids, int* cluster_labels) {
-    //Based on assigned clusters, update the centroids
-    //int* cluster_sizes = (int*)calloc(k, sizeof(int));
-    //double** cluster_sums = (double**)malloc(k * sizeof(double*));
-
     //reset
     for (int i = 0; i < k; i++) {
         for (int j = 0; j < self->vertex; j++) {
@@ -127,14 +118,15 @@ void update_centroids(Graph* self, int k, double** centroids, int* cluster_label
         }
     }
 
-    printf("Updated Centroids:\n");
+    //Debug testing
+    /*printf("Updated Centroids:\n");
     for (int i = 0; i < k; i++) {
         printf("Centroid %d: ", i);
         for (int j = 0; j < self->vertex; j++) {
             printf("%f ", centroids[i][j]);
         }
         printf("\n");
-    }
+    }*/
 
     // Free memory
     free(cluster_sizes);
@@ -146,7 +138,7 @@ void k_means(Graph* self, int k, int* cluster_labels) {
     for (int i = 0; i < k; i++) {
         centroids[i] = (double*)malloc(self->vertex * sizeof(double));
     }
-    initialize_centroids(k, self->vertex, centroids);
+    initialize_centroids(self, k, centroids);
 
     for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
         assign_clusters(self, k, centroids, cluster_labels);
