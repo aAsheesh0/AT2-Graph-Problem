@@ -72,7 +72,21 @@ int main() {
 		printf("Vertex %d: Cluster %d\n", i, cluster_labels[i]);
 	}
 
-	free(cluster_labels);
+	// Count num of vertices in each cluster
+	/*int* cluster_counts = (int*)calloc(k, sizeof(int));
+	for (int i = 0; i < G.vertex; i++) {
+		cluster_counts[cluster_labels[i]]++;
+	}
+
+	printf("\nNumber of vertices in each cluster:\n");
+	for (int i = 0; i < k; i++) {
+		printf("Cluster %d: %d vertices\n", i, cluster_counts[i]);
+	}*/
+
+	//Find the most important neuron for each cluster
+	most_important_neuron(&G, k, cluster_labels);
+
+;	free(cluster_labels);
 
 	// Free dynamically allocated memory
 	free_neural_graph(&G);

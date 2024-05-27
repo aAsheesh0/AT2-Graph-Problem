@@ -225,3 +225,44 @@ void k_means(Graph* self, int k, int* cluster_labels) {
     }
     free(centroids);
 }
+
+double degree_centrality(Graph* graph, int vertex) {
+    int degree = 0;
+    // Iterate through the edges of the graph to count the number of edges incident to the vertex
+    for (int i = 0; i < graph->vertex; i++) {
+        EdgeNodePtr current = graph->edges[i].head;
+        while (current != NULL) {
+            if (current->edge.to_vertex == vertex) {
+                degree++;
+            }
+            current = current->next;
+        }
+    }
+    return (double)degree;
+}
+
+//Find the most neuron for each cluster based on degree centrality
+void most_important_neuron(Graph* graph, int k, int* cluster_labels) {
+    int* most_important_nodes = (int*)malloc(k * sizeof(int));
+    double* highest_centrality = (double*)malloc(k * sizeof(double));
+    for (int i = 0; i < k; i++) {
+        highest_centrality[i] = -1.0;
+    }
+
+    // Calculate degree centrality for each vertex and find the most important node for each cluster
+    for (int i = 0; i < graph->vertex; i++) {
+        double centrality = degree_centrality(graph, i);
+        if (centrality > highest_centrality[cluster_labels[i]]) {
+            highest_centrality[cluster_labels[i]] = centrality;
+            most_important_nodes[cluster_labels[i]] = i;
+        }
+    }
+
+    //print the most important node for each cluster
+    for (int i = 0; i < k; i++) {
+        printf("Cluster %d: Most Important Node = %d, Degree Centrality = %f\n", i, most_important_nodes[i], highest_centrality[i]);
+    }
+
+    free(most_important_nodes);
+    free(highest_centrality);
+}
