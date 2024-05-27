@@ -28,13 +28,84 @@ double jaccard_similarity(int* set1, int size1, int* set2, int size2) {
 }
 
 //calculate the distance between a vertex and a centroid using the Jaccard similarity.
-void calculate_distance(Graph* self, int vertex, double* centroid) {
+double calculate_distance(Graph* self, int vertex, double* centroid) {
+    int* vertex_edges = (int*)malloc(self->vertex * sizeof(int));
+    int vertex_edges_count = 0;
+    EdgeNodePtr current = self->edges[vertex].head;
+    while (current != NULL) {
+        vertex_edges[vertex_edges_count++] = current->edge.to_vertex;
+        current = current->next;
+    }
 
+    int* centroid_edges = (int*)malloc(self->vertex * sizeof(int));
+    int centroid_edges_count = 0;
+    for (int i = 0; i < self->vertex; i++) {
+        if (centroid[i] > 0) {
+            centroid_edges[centroid_edges_count++] = i;
+        }
+    }
+
+    double distance = 1.0 - jaccard_similarity(vertex_edges, vertex_edges_count, centroid_edges, centroid_edges_count);
+
+    free(vertex_edges);
+    free(centroid_edges);
+
+    return distance;
 }
 
 //initialize centeroids based on selection with the help of helper functions to calculate the centroid to initialize to
 void initialize_centroids(Graph* self, int k, double** centroids) {
+    //calculate the first centroid randomly
+    int first_centroid = rand() % self->vertex;
+    for (int j = 0; j < self->vertex; j++) {
+        centroids[0][j] = 0.0;
+    }
+    EdgeNodePtr current = self->edges[first_centroid].head;
+    while (current != NULL) {
+        centroids[0][current->edge.to_vertex] = 1.0;
+        current = current->next;
+    }
 
+    double* distances = (double*)malloc(self->vertex * sizeof(double));
+    double* min_distances = (double*)malloc(self->vertex * sizeof(double));
+
+    for (int i = 1; i < k; i++) {
+        double total_distance = 0.0;
+        for (int j = 0; j < self->vertex; j++) {
+            distances[j] = calculate_distance(self, j, centroids[i - 1]);
+            if (i == 1) {
+                min_distances[j] = distances[j];
+            }
+            else {
+                if (distances[j] < min_distances[j]) {
+                    min_distances[j] = distances[j];
+                }
+            }
+            total_distance += min_distances[j];
+        }
+
+        double random_distance = ((double)rand() / RAND_MAX) * total_distance;
+        int next_centroid = -1;
+        for (int j = 0; j < self->vertex; j++) {
+            random_distance -= min_distances[j];
+            if (random_distance <= 0) {
+                next_centroid = j;
+                break;
+            }
+        }
+
+        for (int j = 0; j < self->vertex; j++) {
+            centroids[i][j] = 0.0;
+        }
+        current = self->edges[next_centroid].head;
+        while (current != NULL) {
+            centroids[i][current->edge.to_vertex] = 1.0;
+            current = current->next;
+        }
+    }
+
+    free(distances);
+    free(min_distances);
 }
 
 // assign data points to clusters
@@ -138,11 +209,15 @@ void k_means(Graph* self, int k, int* cluster_labels) {
     for (int i = 0; i < k; i++) {
         centroids[i] = (double*)malloc(self->vertex * sizeof(double));
     }
+    printf("Initialization started.\n");
     initialize_centroids(self, k, centroids);
 
     for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+        printf("Iteration %d started.\n", iteration + 1);
         assign_clusters(self, k, centroids, cluster_labels);
         update_centroids(self, k, centroids, cluster_labels);
+
+        printf("Iteration %d completed.\n", iteration + 1);
     }
 
     for (int i = 0; i < k; i++) {

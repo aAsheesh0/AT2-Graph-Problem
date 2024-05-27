@@ -57,7 +57,7 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 int main() {
 	Graph G;
 
-	brain_graph_initializer("graph.txt", &G);
+	brain_graph_initializer("reduced_brain_graph.txt", &G);
 
 	//printf("\n-In Degree Vertices-\n");
 	//print_in_degrees(&G);

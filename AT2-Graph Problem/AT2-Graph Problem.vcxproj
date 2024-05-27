@@ -140,6 +140,7 @@
   <ItemGroup>
     <Text Include="graph.txt" />
     <Text Include="human_brain_dataset.txt" />
+    <Text Include="reduced_brain_graph.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,7 +2,7 @@
 #define K_MEANS_H
 #include "neural_graph.h"
 
-#define MAX_ITERATIONS 100
+#define MAX_ITERATIONS 5
 
 void initialize_centroids(Graph* self, int n, double** centroids);
 void assign_clusters(Graph* self, int k, double** centroids, int* cluster_labels);
