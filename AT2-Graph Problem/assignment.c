@@ -6,6 +6,34 @@
 #include "neural_graph_utils.h"
 #include "k_means.h"
 
+//display the menu
+int display_menu() {
+	int choice;
+	printf("\nMenu:\n");
+	printf("1. Run K-Means Clustering\n");
+	printf("2. Exit\n");
+	printf("Enter your choice: ");
+	scanf("%d", &choice);
+	return choice;
+}
+
+//prompt user to ask if they want to see the most important neuron in each of the lobes used by cerebral cortex
+int prompt_view_important_neurons() {
+	int choice;
+	printf("\nDo you want to see the most important neuron for each of the 4 clusters (Lobes)? (1 for Yes): ");
+	scanf("%d", &choice);
+	return choice;
+}
+
+//ask user for number of iterations
+int prompt_iterations() {
+	int iterations;
+	printf("\nEnter the number of iterations for K-Means Clustering: ");
+	scanf("%d", &iterations);
+	return iterations;
+}
+
+//initialise the brain graph, ordering in an array before adding the edge for better understanding of graph
 void brain_graph_initializer(const char* filename, Graph* graph) {
 	IntArray vertices;
 	init_int_array(&vertices, 1000);
@@ -56,40 +84,47 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 
 int main() {
 	Graph G;
+	brain_graph_initializer("brain_dataset_reduced.txt", &G);
 
-	brain_graph_initializer("reduced_brain_graph.txt", &G);
+	while (1) {
+		int choice = display_menu();
+		if (choice == 2) {
+			printf("Exiting the program.\n");
+			break;
+		}
+		else if (choice == 1) {
+			int iterations = prompt_iterations();
 
-	//printf("\n-In Degree Vertices-\n");
-	//print_in_degrees(&G);
+			printf("\nRunning K-Means Clustering with %d iterations:\n", iterations);
+			int k = 4;
+			int* cluster_labels = (int*)malloc(G.vertex * sizeof(int));
 
-	printf("\nTesting K-Means Clustering:\n");
-	int k = 4;
-	int* cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+			k_means(&G, k, cluster_labels, iterations);
 
-	k_means(&G, k, cluster_labels);
+			// Count and display num of neurons in each cluster
+			/*int* cluster_counts = (int*)calloc(k, sizeof(int));
+			for (int i = 0; i < G.vertex; i++) {
+				cluster_counts[cluster_labels[i]]++;
+			}
 
-	for (int i = 0; i < G.vertex; i++) {
-		printf("Vertex %d: Cluster %d\n", i, cluster_labels[i]);
+			printf("\nNumber of vertices in each cluster:\n");
+			for (int i = 0; i < k; i++) {
+				printf("Cluster %d: %d vertices\n", i, cluster_counts[i]);
+			}*/
+
+			int view_choice = prompt_view_important_neurons();
+			if (view_choice == 1) {
+				//Find the most important neuron for each cluster
+				most_important_neuron(&G, k, cluster_labels);
+			}
+			free(cluster_labels);
+			//free(cluster_counts);
+		}
+		else {
+			printf("Invalid choice. Please try again.\n");
+		}
 	}
-
-	// Count num of vertices in each cluster
-	/*int* cluster_counts = (int*)calloc(k, sizeof(int));
-	for (int i = 0; i < G.vertex; i++) {
-		cluster_counts[cluster_labels[i]]++;
-	}
-
-	printf("\nNumber of vertices in each cluster:\n");
-	for (int i = 0; i < k; i++) {
-		printf("Cluster %d: %d vertices\n", i, cluster_counts[i]);
-	}*/
-
-	//Find the most important neuron for each cluster
-	most_important_neuron(&G, k, cluster_labels);
-
-;	free(cluster_labels);
-
 	// Free dynamically allocated memory
 	free_neural_graph(&G);
-
 	return;
 }

@@ -46,7 +46,7 @@
     <Text Include="graph.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="reduced_brain_graph.txt">
+    <Text Include="brain_dataset_reduced.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

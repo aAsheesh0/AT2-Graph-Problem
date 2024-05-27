@@ -204,7 +204,7 @@ void update_centroids(Graph* self, int k, double** centroids, int* cluster_label
 }
 
 //compute K-means clustering
-void k_means(Graph* self, int k, int* cluster_labels) {
+void k_means(Graph* self, int k, int* cluster_labels, int num_iterations) {
     double** centroids = (double**)malloc(k * sizeof(double*));
     for (int i = 0; i < k; i++) {
         centroids[i] = (double*)malloc(self->vertex * sizeof(double));
@@ -212,7 +212,7 @@ void k_means(Graph* self, int k, int* cluster_labels) {
     printf("Initialization started.\n");
     initialize_centroids(self, k, centroids);
 
-    for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++) {
+    for (int iteration = 0; iteration < num_iterations; iteration++) {
         printf("Iteration %d started.\n", iteration + 1);
         assign_clusters(self, k, centroids, cluster_labels);
         update_centroids(self, k, centroids, cluster_labels);
