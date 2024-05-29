@@ -150,15 +150,6 @@ void assign_clusters(Graph* self, int k, double** centroids, int* cluster_labels
     }*/
 }
 
-//calculate Euclidean distance between two data points (The random calculations were not being executed properly)
-/*double euclidean_distance(double* data_point1, double* data_point2, int n) {
-    double distance = 0.0;
-    for (int i = 0; i < n; i++) {
-        distance += pow(data_point1[i] - data_point2[i], 2);
-    }
-    return sqrt(distance);
-}*/
-
 void update_centroids(Graph* self, int k, double** centroids, int* cluster_labels) {
     //reset
     for (int i = 0; i < k; i++) {
@@ -209,15 +200,15 @@ void k_means(Graph* self, int k, int* cluster_labels, int num_iterations) {
     for (int i = 0; i < k; i++) {
         centroids[i] = (double*)malloc(self->vertex * sizeof(double));
     }
-    printf("Initialization started.\n");
+    //printf("Initialization started.\n");
     initialize_centroids(self, k, centroids);
 
     for (int iteration = 0; iteration < num_iterations; iteration++) {
-        printf("Iteration %d started.\n", iteration + 1);
+        //printf("Iteration %d started.\n", iteration + 1);
         assign_clusters(self, k, centroids, cluster_labels);
         update_centroids(self, k, centroids, cluster_labels);
 
-        printf("Iteration %d completed.\n", iteration + 1);
+        //printf("Iteration %d completed.\n", iteration + 1);
     }
 
     for (int i = 0; i < k; i++) {

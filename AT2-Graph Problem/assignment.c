@@ -5,13 +5,15 @@
 #include "neural_graph.h"
 #include "neural_graph_utils.h"
 #include "k_means.h"
+#include "different_metrics_k_means.h"
 
 //display the menu
 int display_menu() {
 	int choice;
 	printf("\nMenu:\n");
-	printf("1. Run K-Means Clustering\n");
-	printf("2. Exit\n");
+	printf("1. Run K-Means Clustering with Euclidean Distance\n");
+	printf("2. Run K-Means Clustering with Jaccard Similarity\n");
+	printf("3. Exit\n");
 	printf("Enter your choice: ");
 	scanf("%d", &choice);
 	return choice;
@@ -84,25 +86,37 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 
 int main() {
 	Graph G;
-	brain_graph_initializer("brain_dataset_reduced.txt", &G);
+	brain_graph_initializer("graph.txt", &G);
 
 	while (1) {
 		int choice = display_menu();
-		if (choice == 2) {
+		if (choice == 3) {
 			printf("Exiting the program.\n");
 			break;
 		}
-		else if (choice == 1) {
+		else if (choice == 1 || choice == 2) {
 			int iterations = prompt_iterations();
-
-			printf("\nRunning K-Means Clustering with %d iterations:\n", iterations);
 			int k = 4;
-			int* cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+			int* cluster_labels = NULL;
 
-			k_means(&G, k, cluster_labels, iterations);
+			switch (choice) {
+			case 1:
+				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+				printf("\nRunning K-Means Clustering with Euclidean Distance for %d iterations:\n", iterations);
+				k_means_metric(&G, k, cluster_labels, iterations, euclidean_distance);
+				break;
+			case 2:
+				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+				printf("\nRunning K-Means Clustering with Jaccard Similarity for %d iterations:\n", iterations);
+				k_means(&G, k, cluster_labels, iterations);
+				break;
+			default:
+				printf("Invalid choice.\n");
+				continue;
+			}
 
 			// Count and display num of neurons in each cluster
-			/*int* cluster_counts = (int*)calloc(k, sizeof(int));
+			int* cluster_counts = (int*)calloc(k, sizeof(int));
 			for (int i = 0; i < G.vertex; i++) {
 				cluster_counts[cluster_labels[i]]++;
 			}
@@ -110,7 +124,7 @@ int main() {
 			printf("\nNumber of vertices in each cluster:\n");
 			for (int i = 0; i < k; i++) {
 				printf("Cluster %d: %d vertices\n", i, cluster_counts[i]);
-			}*/
+			}
 
 			int view_choice = prompt_view_important_neurons();
 			if (view_choice == 1) {

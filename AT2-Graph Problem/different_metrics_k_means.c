@@ -4,7 +4,7 @@
 #include <float.h>
 #include "different_metrics_k_means.h"
 
-double euclidean_distance2(double* point1, double* point2, int dimensions) {
+double euclidean_distance(double* point1, double* point2, int dimensions) {
     double sum = 0.0;
     for (int i = 0; i < dimensions; i++) {
         sum += pow(point1[i] - point2[i], 2);
@@ -34,7 +34,7 @@ double calculate_distance_metric(Graph* self, int vertex, double* centroid, doub
     return distance;
 }
 
-void initialize_centroids_metric(Graph* self, int k, double** centroids) {
+void initialize_centroids_for_metric(Graph* self, int k, double** centroids) {
     // Choose the first centroid randomly
     int first_centroid = rand() % self->vertex;
     for (int j = 0; j < self->vertex; j++) {
@@ -52,7 +52,7 @@ void initialize_centroids_metric(Graph* self, int k, double** centroids) {
     for (int i = 1; i < k; i++) {
         double total_distance = 0.0;
         for (int j = 0; j < self->vertex; j++) {
-            distances[j] = calculate_distance_metric(self, j, centroids[i - 1], euclidean_distance2);
+            distances[j] = calculate_distance_metric(self, j, centroids[i - 1], euclidean_distance);
             if (i == 1) {
                 min_distances[j] = distances[j];
             }
@@ -86,4 +86,40 @@ void initialize_centroids_metric(Graph* self, int k, double** centroids) {
 
     free(distances);
     free(min_distances);
+}
+
+void assign_clusters_for_metric(Graph* self, int k, double** centroids, int* cluster_labels, double (*distance_func)(double*, double*, int)) {
+    for (int i = 0; i < self->vertex; i++) {
+        double min_distance = DBL_MAX;
+        int closest_centroid = -1;
+
+        for (int j = 0; j < k; j++) {
+            double distance = calculate_distance_metric(self, i, centroids[j], distance_func);
+            if (distance < min_distance) {
+                min_distance = distance;
+                closest_centroid = j;
+            }
+        }
+        cluster_labels[i] = closest_centroid;
+    }
+}
+
+// K-means clustering algorithm using different distance metrics
+void k_means_metric(Graph* self, int k, int* cluster_labels, int num_iterations, double (*distance_func)(double*, double*, int)) {
+    double** centroids = (double**)malloc(k * sizeof(double*));
+    for (int i = 0; i < k; i++) {
+        centroids[i] = (double*)malloc(self->vertex * sizeof(double));
+    }
+
+    initialize_centroids_for_metric(self, k, centroids);
+
+    for (int iteration = 0; iteration < num_iterations; iteration++) {
+        assign_clusters_for_metric(self, k, centroids, cluster_labels, distance_func);
+        update_centroids(self, k, centroids, cluster_labels);
+    }
+
+    for (int i = 0; i < k; i++) {
+        free(centroids[i]);
+    }
+    free(centroids);
 }
