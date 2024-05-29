@@ -27,6 +27,9 @@
     <ClCompile Include="k_means.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="different_metrics_k_means.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="neural_graph.h">
@@ -36,6 +39,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="k_means.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="different_metrics_k_means.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
