@@ -13,7 +13,8 @@ int display_menu() {
 	printf("\nMenu:\n");
 	printf("1. Run K-Means Clustering with Euclidean Distance\n");
 	printf("2. Run K-Means Clustering with Jaccard Similarity\n");
-	printf("3. Exit\n");
+	printf("3. Run K-Means Clustering with Cosine Distance\n");
+	printf("4. Exit\n");
 	printf("Enter your choice: ");
 	scanf("%d", &choice);
 	return choice;
@@ -86,15 +87,15 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 
 int main() {
 	Graph G;
-	brain_graph_initializer("graph.txt", &G);
+	brain_graph_initializer("brain_dataset_reduced.txt", &G);
 
 	while (1) {
 		int choice = display_menu();
-		if (choice == 3) {
+		if (choice == 4) {
 			printf("Exiting the program.\n");
 			break;
 		}
-		else if (choice == 1 || choice == 2) {
+		else if (choice >= 1 && choice <= 3) {
 			int iterations = prompt_iterations();
 			int k = 4;
 			int* cluster_labels = NULL;
@@ -109,6 +110,11 @@ int main() {
 				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
 				printf("\nRunning K-Means Clustering with Jaccard Similarity for %d iterations:\n", iterations);
 				k_means(&G, k, cluster_labels, iterations);
+				break;
+			case 3:
+				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+				printf("\nRunning K-Means Clustering with Cosine Distance for %d iterations:\n", iterations);
+				k_means_metric(&G, k, cluster_labels, iterations, cosine_distance);
 				break;
 			default:
 				printf("Invalid choice.\n");

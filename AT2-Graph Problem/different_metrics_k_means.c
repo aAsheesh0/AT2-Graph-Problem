@@ -12,6 +12,18 @@ double euclidean_distance(double* point1, double* point2, int dimensions) {
     return sqrt(sum);
 }
 
+double cosine_distance(double* point1, double* point2, int dimensions) {
+    double dot_product = 0.0;
+    double norm1 = 0.0;
+    double norm2 = 0.0;
+    for (int i = 0; i < dimensions; i++) {
+        dot_product += point1[i] * point2[i];
+        norm1 += pow(point1[i], 2);
+        norm2 += pow(point2[i], 2);
+    }
+    return 1.0 - (dot_product / (sqrt(norm1) * sqrt(norm2)));
+}
+
 double calculate_distance_metric(Graph* self, int vertex, double* centroid, double (*distance_func)(double*, double*, int)) {
     double* vertex_vector = (double*)calloc(self->vertex, sizeof(double));
     double* centroid_vector = (double*)calloc(self->vertex, sizeof(double));
