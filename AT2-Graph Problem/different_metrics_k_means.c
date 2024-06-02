@@ -16,12 +16,29 @@ double cosine_distance(double* point1, double* point2, int dimensions) {
     double dot_product = 0.0;
     double norm1 = 0.0;
     double norm2 = 0.0;
+    int non_zero_dimensions = 0;
+
     for (int i = 0; i < dimensions; i++) {
         dot_product += point1[i] * point2[i];
         norm1 += pow(point1[i], 2);
         norm2 += pow(point2[i], 2);
+        if (point1[i] != 0.0 || point2[i] != 0.0) {
+            //printf("Zero\n");
+            non_zero_dimensions++;
+        }
     }
-    return 1.0 - (dot_product / (sqrt(norm1) * sqrt(norm2)));
+    if (non_zero_dimensions == 0) {
+        //printf("Zero Returned\n");
+        return 0.0;
+    }
+
+    if (norm1 != 0.0 && norm2 != 0.0) {
+        double cosine_similarity = dot_product / (sqrt(norm1) * sqrt(norm2));
+        return 2.0 - 2.0 * cosine_similarity;
+    }
+    else {
+        return 0.0;
+    }
 }
 
 double calculate_distance_metric(Graph* self, int vertex, double* centroid, double (*distance_func)(double*, double*, int)) {

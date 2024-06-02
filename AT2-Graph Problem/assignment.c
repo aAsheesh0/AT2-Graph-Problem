@@ -79,6 +79,12 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 		add_edge(graph, vertex_map[from], vertex_map[to], 0);
 	}
 
+	for (int i = 0; i < unique_size; i++) {
+		if (graph->edges[i].head == NULL) {
+			graph->edges[i].head = NULL;
+		}
+	}
+
 	// Free dynamically allocated memory
 	free_int_array(&vertices);
 	free(vertex_map);
@@ -103,16 +109,28 @@ int main() {
 			switch (choice) {
 			case 1:
 				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+				if (cluster_labels == NULL) {
+					fprintf(stderr, "Memory allocation failed for cluster_labels\n");
+					exit(EXIT_FAILURE);
+				}
 				printf("\nRunning K-Means Clustering with Euclidean Distance for %d iterations:\n", iterations);
 				k_means_metric(&G, k, cluster_labels, iterations, euclidean_distance);
 				break;
 			case 2:
 				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+				if (cluster_labels == NULL) {
+					fprintf(stderr, "Memory allocation failed for cluster_labels\n");
+					exit(EXIT_FAILURE);
+				}
 				printf("\nRunning K-Means Clustering with Jaccard Similarity for %d iterations:\n", iterations);
 				k_means(&G, k, cluster_labels, iterations);
 				break;
 			case 3:
 				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
+				if (cluster_labels == NULL) {
+					fprintf(stderr, "Memory allocation failed for cluster_labels\n");
+					exit(EXIT_FAILURE);
+				}
 				printf("\nRunning K-Means Clustering with Cosine Distance for %d iterations:\n", iterations);
 				k_means_metric(&G, k, cluster_labels, iterations, cosine_distance);
 				break;
