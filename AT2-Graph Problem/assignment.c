@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "neural_graph.h"
 #include "neural_graph_utils.h"
 #include "k_means.h"
@@ -105,6 +106,9 @@ int main() {
 			int iterations = prompt_iterations();
 			int k = 4;
 			int* cluster_labels = NULL;
+			clock_t start;
+			clock_t end;
+			double time_used;
 
 			switch (choice) {
 			case 1:
@@ -114,7 +118,9 @@ int main() {
 					exit(EXIT_FAILURE);
 				}
 				printf("\nRunning K-Means Clustering with Euclidean Distance for %d iterations:\n", iterations);
+				start = clock();
 				k_means_metric(&G, k, cluster_labels, iterations, euclidean_distance);
+				end = clock();
 				break;
 			case 2:
 				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
@@ -123,7 +129,9 @@ int main() {
 					exit(EXIT_FAILURE);
 				}
 				printf("\nRunning K-Means Clustering with Jaccard Similarity for %d iterations:\n", iterations);
+				start = clock();
 				k_means(&G, k, cluster_labels, iterations);
+				end = clock();
 				break;
 			case 3:
 				cluster_labels = (int*)malloc(G.vertex * sizeof(int));
@@ -132,12 +140,17 @@ int main() {
 					exit(EXIT_FAILURE);
 				}
 				printf("\nRunning K-Means Clustering with Cosine Distance for %d iterations:\n", iterations);
+				start = clock();
 				k_means_metric(&G, k, cluster_labels, iterations, cosine_distance);
+				end = clock();
 				break;
 			default:
 				printf("Invalid choice.\n");
 				continue;
 			}
+
+			time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+			printf("Time taken: %f seconds\n", time_used);
 
 			// Count and display num of neurons in each cluster
 			int* cluster_counts = (int*)calloc(k, sizeof(int));
