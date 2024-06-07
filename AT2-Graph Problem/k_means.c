@@ -232,7 +232,8 @@ double degree_centrality(Graph* graph, int vertex) {
     return (double)degree;
 }
 
-//Find the most neuron for each cluster based on degree centrality
+//Find the most neuron for each cluster based on degree centrality. 
+// NOTE- The important neurons here are shown from our util array, for this assignment we have used this approach. However, the actual neuron can also be calculated.
 void most_important_neuron(Graph* graph, int k, int* cluster_labels) {
     int* most_important_nodes = (int*)malloc(k * sizeof(int));
     double* highest_centrality = (double*)malloc(k * sizeof(double));
@@ -251,7 +252,7 @@ void most_important_neuron(Graph* graph, int k, int* cluster_labels) {
 
     //print the most important node for each cluster
     for (int i = 0; i < k; i++) {
-        printf("Cluster %d: Most Important Node = %d, Degree Centrality = %f\n", i, most_important_nodes[i], highest_centrality[i]);
+        printf("Cluster %d: Most Important Node is the one allocated in the array at %d, Degree Centrality = %f\n", i, most_important_nodes[i], highest_centrality[i]);
     }
 
     free(most_important_nodes);

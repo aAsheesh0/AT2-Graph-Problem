@@ -1,6 +1,7 @@
 #ifndef NEURAL_GRAPH_UTILS_H
 #define NEURAL_GRAPH_UTILS_H
 
+// Utils for structuring the graph, this way we could order the graph neurons
 typedef struct {
     int* data;
     int size;

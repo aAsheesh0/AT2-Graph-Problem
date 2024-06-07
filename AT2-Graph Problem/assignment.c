@@ -94,7 +94,7 @@ void brain_graph_initializer(const char* filename, Graph* graph) {
 
 int main() {
 	Graph G;
-	brain_graph_initializer("brain_dataset_reduced.txt", &G);
+	brain_graph_initializer("brain_dataset_reduced.txt", &G); // brain_dataset_reduced- File used for all the analysis
 
 	while (1) {
 		int choice = display_menu();

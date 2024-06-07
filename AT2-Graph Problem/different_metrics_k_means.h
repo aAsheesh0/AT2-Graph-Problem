@@ -4,6 +4,7 @@
 #include "neural_graph.h"
 #include "k_means.h"
 
+//Other two distance metrics- Euclidean distance and Cosine similarity
 double euclidean_distance(double* point1, double* point2, int dimensions);
 double cosine_distance(double* point1, double* point2, int dimensions);
 
